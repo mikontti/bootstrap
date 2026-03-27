@@ -31,6 +31,7 @@ EOF
 sleep 5
 
 wget https://raw.githubusercontent.com/mikontti/bootstrap/refs/heads/main/bootstrap.sh
+chmod +x /root/bootstrap.sh
 
 echo "[INFO] Updating system"
 apt-get -y update
@@ -85,7 +86,7 @@ fi
 echo "[INFO] Writing /root/models.config"
 if [ ! -f /root/models.config ]; then
     #cat models.config | zstd --ultra -22 | base64 -w0
-    echo "KLUv/QSILQsAxtA4FBD9Su++bVaVglEj7dc2glVVVQDgMgAyADIAX45t4CgC+T1tAL3TtGgQ6xv1f13XsOOYNtzTjF8gJI8E+XUdf1tOQQBAAimA47WmTzynCMf1eNJCQERCCq8tvKq2wNcpPebtP+3R/faolkDiHIhy7mv9dbsEzpu2RxZeWeBo5Wj8keNnn4iJy/ar7lMJMn2K+4r2p6u6PG2gT/muPxzTdvyeMDgAQC+o6aoKkWDTMYoGwLIgSZMkivXZmJbf91E2RvlMocBnPoPi6ZIjfA5A4zDPcsC2PX61Hl10GAaAgYpjGJQzIEDGGLKxG3dQtBkAYg8OJMABbEgDFIAN2DACAAAJyYBawEE4MRkAYFJcRaDduhizCaxZcL9oYyAcU/iAgeBBZy68cAV5sAsP+GEA2NA/If3y4/MwxpUjELbEZRIxyiUEXfbscLxXCgQ+cXgJgl8EDMB9GMccVJXcym1PA+8JWyZ/oA==" | base64 -d | zstd -d -o /root/models.config
+    echo "KLUv/QSILQsAxtA4FBD9Su++bVaVglEj7dc2glVVVQDgMgAyADIAX45t4CgC+T1tAL3TtGgQ6xv1f13XsOOYNtzTjF8gJI8E+XUdf1tOQQBAAimA47WmTzynCMf1eNJCQERCCq8tvKq2wNcpPebtP+3R/faolkDiHIhy7mv9dbsEzpu2RxZeWeBo5Wj8keNnn4iJy/ar7lMJMn2K+4r2p6u6PG2gT/muPxzTdvyeMDgAQC+o6aoKkWDTMYoGwLIgSZMkivXZmJbf91E2RvlMocBnPoPi6ZIjfA5A4zDPcsC2PX61Hl10GAaAgYpjGJQzIEDGGLKxG3dQtBkAYg8OJMABbEgDFIAN2DACAAAJyYBawEE4MRkAYFJcRaDduhizCaxZcL9oYyAcU/iAgeBBZy68cAV5sAsP+GEA2NA/If3y4/MwxpUjELbEZRIxyiUEXfbscLxXCgQ+cXgJgl8EDMB9GMccVJXcym1PA+8JWyZ/oA==" | base64 -d | zstd -f -d -o /root/models.config
 fi
 
 #BASE="https://huggingface.co/unsloth/Qwen3.5-122B-A10B-GGUF/resolve/main"
@@ -104,12 +105,17 @@ fi
 #fi
 
 echo "[INFO] writing llama.cpp builder.."
-echo "KLUv/QSIXQUAYkkfGVDXA08QwkMqUkFQ1Oge9ignHdLwNZNY8AGFnvp739bSMDHz1tsgZO+Uk/RSyau9tjz/oQhJmGmhnKdpmHfrWq9y5Z1qEk9Yd/6La404T6PysBgPTncd5nTLd3pnK7QmjFpPQ2J5b+xy3tGv/Y43hPS9oxzEOFnFzVYRCAIQIBAYofP2l8q6A7oWuM1YpG63QfULeFuO8QwUzABJY7MXq3tbKxB8g9MDfSYNOA==" | base64 -d | zstd -d -o /root/build-llamacpp.sh
+echo "KLUv/QSIXQUAYkkfGVDXA08QwkMqUkFQ1Oge9ignHdLwNZNY8AGFnvp739bSMDHz1tsgZO+Uk/RSyau9tjz/oQhJmGmhnKdpmHfrWq9y5Z1qEk9Yd/6La404T6PysBgPTncd5nTLd3pnK7QmjFpPQ2J5b+xy3tGv/Y43hPS9oxzEOFnFzVYRCAIQIBAYofP2l8q6A7oWuM1YpG63QfULeFuO8QwUzABJY7MXq3tbKxB8g9MDfSYNOA==" | base64 -d | zstd -f -d -o /root/build-llamacpp.sh
+
+### some weird reason, may fail on first build attempt??
 chmod +x /root/build-llamacpp.sh
+set +e
+bash -lc '/root/build-llamacpp.sh'
+set -e
 /root/build-llamacpp.sh
 
 echo "[INFO] writing runner.."
-echo "KLUv/QSIzQgAdtE1HyBzdfCPSURb3pW2kp9ZAf4KBGF7h812SBbEBxgKcDwtACsALQDtup6jm+oFsgZBULOM0PVnS/gn4Xvz8UqkAXFQ2mc1MWO8b66sqs4SSWiJAIF/EjZ1PYEX1jyUYxrdJYxcIzMJ34z/meSqv2itmae4PbO/mL5/fhgwEK+akkXXNUE9J41OTXLCWrlujBDT+2py3e4djdVvhsT+ggXBJY7LecobynWd5WIMjBHau85q95J0eHxyf3jHWQ9e5Jyg5sr02hqZmtYu4ZLinr2EQLyzr3uKwwEYIBASAePWAxemdrDtHADNrJof6xCtOc72jvtWVwQMvZwx0kQBw2LFuIDZuNbmgHT9D8fjAr+o3lYAwrFcBQrgELna" | base64 -d | zstd -d -o /root/run-llama-server.sh
+echo "KLUv/QSIzQgAdtE1HyBzdfCPSURb3pW2kp9ZAf4KBGF7h812SBbEBxgKcDwtACsALQDtup6jm+oFsgZBULOM0PVnS/gn4Xvz8UqkAXFQ2mc1MWO8b66sqs4SSWiJAIF/EjZ1PYEX1jyUYxrdJYxcIzMJ34z/meSqv2itmae4PbO/mL5/fhgwEK+akkXXNUE9J41OTXLCWrlujBDT+2py3e4djdVvhsT+ggXBJY7LecobynWd5WIMjBHau85q95J0eHxyf3jHWQ9e5Jyg5sr02hqZmtYu4ZLinr2EQLyzr3uKwwEYIBASAePWAxemdrDtHADNrJof6xCtOc72jvtWVwQMvZwx0kQBw2LFuIDZuNbmgHT9D8fjAr+o3lYAwrFcBQrgELna" | base64 -d | zstd -f -d -o /root/run-llama-server.sh
 chmod +x /root/run-llama-server.sh
 
 
