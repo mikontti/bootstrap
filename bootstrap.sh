@@ -30,6 +30,8 @@ CTRL+C to abort now. Will commence in 5 seconds.
 EOF
 sleep 5
 
+wget https://raw.githubusercontent.com/mikontti/bootstrap/refs/heads/main/bootstrap.sh
+
 echo "[INFO] Updating system"
 apt-get -y update
 apt-get -y upgrade
@@ -83,7 +85,7 @@ fi
 echo "[INFO] Writing /root/models.config"
 if [ ! -f /root/models.config ]; then
     #cat models.config | zstd --ultra -22 | base64 -w0
-    echo "KLUv/QSILQsAxtA4FBD9Su++bVaVglEj7dc2glVVVQDgMgAyADIAX45t4CgC+T1tAL3TtGgQ6xv1f13XsOOYNtzTjF8gJI8E+XUdf1tOQQBAAimA47WmTzynCMf1eNJCQERCCq8tvKq2wNcpPebtP+3R/faolkDiHIhy7mv9dbsEzpu2RxZeWeBo5Wj8keNnn4iJy/ar7lMJMn2K+4r2p6u6PG2gT/muPxzTdvyeMDgAQC+o6aoKkWDTMYoGwLIgSZMkivXZmJbf91E2RvlMocBnPoPi6ZIjfA5A4zDPcsC2PX61Hl10GAaAgYpjGJQzIEDGGLKxG3dQtBkAYg8OJMABbEgDFIAN2DACAAAJyYBawEE4MRkAYFJcRaDduhizCaxZcL9oYyAcU/iAgeBBZy68cAV5sAsP+GEA2NA/If3y4/MwxpUjELbEZRIxyiUEXfbscLxXCgQ+cXgJgl8EDMB9GMccVJXcym1PA+8JWyZ/oA==" | base64 -d | ztsd -d -o /root/models.config
+    echo "KLUv/QSILQsAxtA4FBD9Su++bVaVglEj7dc2glVVVQDgMgAyADIAX45t4CgC+T1tAL3TtGgQ6xv1f13XsOOYNtzTjF8gJI8E+XUdf1tOQQBAAimA47WmTzynCMf1eNJCQERCCq8tvKq2wNcpPebtP+3R/faolkDiHIhy7mv9dbsEzpu2RxZeWeBo5Wj8keNnn4iJy/ar7lMJMn2K+4r2p6u6PG2gT/muPxzTdvyeMDgAQC+o6aoKkWDTMYoGwLIgSZMkivXZmJbf91E2RvlMocBnPoPi6ZIjfA5A4zDPcsC2PX61Hl10GAaAgYpjGJQzIEDGGLKxG3dQtBkAYg8OJMABbEgDFIAN2DACAAAJyYBawEE4MRkAYFJcRaDduhizCaxZcL9oYyAcU/iAgeBBZy68cAV5sAsP+GEA2NA/If3y4/MwxpUjELbEZRIxyiUEXfbscLxXCgQ+cXgJgl8EDMB9GMccVJXcym1PA+8JWyZ/oA==" | base64 -d | zstd -d -o /root/models.config
 fi
 
 #BASE="https://huggingface.co/unsloth/Qwen3.5-122B-A10B-GGUF/resolve/main"
