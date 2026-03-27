@@ -5,7 +5,6 @@ export DEBIAN_FRONTEND
 
 #!/usr/bin/env bash
 
-#!/usr/bin/env bash
 set -u
 
 printf '=== identity ===\n'
