@@ -5,55 +5,17 @@ export DEBIAN_FRONTEND
 
 #!/usr/bin/env bash
 
-set -u
-
-printf '=== identity ===\n'
-printf 'whoami: %s\n' "$(whoami)"
-printf 'id -u: %s\n' "$(id -u)"
-printf 'id -un: %s\n' "$(id -un)"
-printf 'groups: %s\n' "$(id -Gn)"
-
-printf '\n=== sudo markers ===\n'
-printf 'SUDO_USER=%s\n' "${SUDO_USER-}"
-printf 'SUDO_UID=%s\n' "${SUDO_UID-}"
-printf 'SUDO_GID=%s\n' "${SUDO_GID-}"
-
-printf '\n=== shell/process ===\n'
-printf 'SHELL=%s\n' "${SHELL-}"
-printf 'PWD=%s\n' "$PWD"
-printf 'HOME=%s\n' "${HOME-}"
-printf 'USER=%s\n' "${USER-}"
-printf 'LOGNAME=%s\n' "${LOGNAME-}"
-
-printf '\n=== path/env ===\n'
-printf 'PATH=%s\n' "${PATH-}"
-printf 'LD_LIBRARY_PATH=%s\n' "${LD_LIBRARY_PATH-}"
-printf 'CUDA_HOME=%s\n' "${CUDA_HOME-}"
-printf 'CUDACXX=%s\n' "${CUDACXX-}"
-printf 'CC=%s\n' "${CC-}"
-printf 'CXX=%s\n' "${CXX-}"
-
-printf '\n=== command lookup ===\n'
-command -v bash || true
-command -v cmake || true
-command -v gcc || true
-command -v g++ || true
-command -v nvcc || true
-
-printf '\n=== versions ===\n'
-cmake --version 2>/dev/null | head -n 1 || true
-gcc --version 2>/dev/null | head -n 1 || true
-g++ --version 2>/dev/null | head -n 1 || true
-nvcc --version 2>/dev/null | tail -n 1 || true
-
-printf '\n=== full exported env (sorted) ===\n'
-env | sort
-
-exit 1
-
-
 if [[ $EUID -ne 0 ]]; then
   echo "[ERROR] Run as root. You're running as $(whoami)"
+  exit 1
+fi
+
+
+if ! command -v nvcc >/dev/null 2>&1; then
+  printf 'Error: nvcc not found in PATH.\n' >&2
+  printf 'Current PATH: %s\n' "$PATH" >&2
+  printf 'This usually happens when the script is started with sudo bash and /usr/local/cuda/bin is not preserved.\n' >&2
+  printf 'use "curl -fsSL https://raw.githubusercontent.com/mikontti/bootstrap/refs/heads/main/bootstrap.sh | bash" to run.'
   exit 1
 fi
 
@@ -156,9 +118,6 @@ echo "KLUv/QSIXQUAYkkfGVDXA08QwkMqUkFQ1Oge9ignHdLwNZNY8AGFnvp739bSMDHz1tsgZO+Uk/
 
 ### some weird reason, may fail on first build attempt??
 chmod +x /root/build-llamacpp.sh
-set +e
-bash -lc '/root/build-llamacpp.sh'
-set -e
 /root/build-llamacpp.sh
 
 echo "[INFO] writing runner.."
